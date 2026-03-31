@@ -53,7 +53,7 @@
 | Pedal | Hi-Drive | Very low gain |
 | Drive | 10% | Fixed |
 | Tone | 30% | Very dark — just adding sub harmonics |
-| Mix | 25% | Fixed |
+| Mix | 20% | Fixed |
 
 ### ChromaVerb
 
