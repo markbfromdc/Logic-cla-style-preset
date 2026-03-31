@@ -56,6 +56,19 @@ Presets install to Logic's standard locations:
 | [presets/](presets/) | Individual preset specification sheets |
 | [BUILD-GUIDE.md](BUILD-GUIDE.md) | Step-by-step Logic Pro build instructions |
 | [TESTING-CHECKLIST.md](TESTING-CHECKLIST.md) | QA checklist for each preset |
+| [spec/](spec/) | Technical specifications (see below) |
+
+### Technical Specifications
+
+| Spec | Description |
+|------|-------------|
+| [spec/architecture.md](spec/architecture.md) | System architecture, frequency-band design, plugin selection rationale |
+| [spec/signal-flow.md](spec/signal-flow.md) | Signal flow diagrams, gain staging, level budgets per preset |
+| [spec/smart-controls.md](spec/smart-controls.md) | Parameter mapping math, dual-parameter DYNAMICS, WIDTH behavior |
+| [spec/plugin-settings-rationale.md](spec/plugin-settings-rationale.md) | Audio engineering decisions for every plugin setting |
+| [spec/testing-protocols.md](spec/testing-protocols.md) | Unit tests, integration tests, mono compatibility, performance benchmarks |
+| [spec/compatibility.md](spec/compatibility.md) | Logic Pro version requirements, installation, troubleshooting |
+| [spec/version-history.md](spec/version-history.md) | Change log and version traceability |
 
 ## Build Order
 
