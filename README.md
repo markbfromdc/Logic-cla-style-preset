@@ -1,22 +1,20 @@
 # MPD-CLA: Logic Pro Channel Strip Presets
 
-CLA Signature Series-inspired channel strip presets for Logic Pro, built entirely with stock Logic plugins.
+CLA Signature Series-inspired channel strip presets for Logic Pro, built entirely with stock Logic plugins. Organized by **frequency domain** — apply to any source with content in that band.
 
 ## Overview
 
-Five self-contained channel strip presets, each with 8 Smart Control macro knobs that mirror the CLA plugin workflow: **Sensitivity, Bass, Treble, Compress, Reverb, Delay, Pitch, Output**.
-
-All processing runs as inserts (no bus sends), making each preset fully portable across sessions.
+Five self-contained channel strip presets, each with 8 Smart Control macro knobs. The dynamics section is fully shapeable: **DYNAMICS** morphs between punch and sustain, while **WIDTH** controls mono-safe stereo image via Direction Mixer.
 
 ## Presets
 
-| Preset | Target | Compressor | Key Character |
-|--------|--------|------------|---------------|
-| **MPD-CLA-VOX** | Lead/background vocals | FET 4:1 | DeEsser + Exciter + Plate verb |
-| **MPD-CLA-BASS** | Electric/synth bass | Opto 3:1 | Pedalboard saturation for speaker translation |
-| **MPD-CLA-DRUM** | Drum bus/percussion | FET 8:1 | Smash + Enveloper transient recovery |
-| **MPD-CLA-GTR** | Electric guitar | VCA 3:1 | Exciter + Hall verb + dotted 1/8 delay |
-| **MPD-CLA-UNPLG** | Acoustic instruments | Opto 2.5:1 | Space Designer IR + gentle Exciter air |
+| Preset | Frequency Range | Compressor | Key Character |
+|--------|----------------|------------|---------------|
+| **MPD-CLA-SUB** | 20–80 Hz | Opto 4:1 | Pedalboard saturation for speaker translation |
+| **MPD-CLA-LO-MID** | 80–500 Hz | Opto 3:1 | Exciter warmth + tape thickening |
+| **MPD-CLA-HI-MID** | 500 Hz–2 kHz | FET 4:1 | DeEsser + Exciter midrange presence |
+| **MPD-CLA-HIGH** | 2–8 kHz | VCA 3:1 | DeEsser + Exciter edge + Hall verb |
+| **MPD-CLA-AIR** | 8–20 kHz | VCA 2:1 | Exciter shimmer + Plate verb tail |
 
 ## Universal Macro Layout
 
@@ -24,14 +22,19 @@ All 5 presets share the same 8-knob Smart Control layout:
 
 | Knob | Label | Controls |
 |------|-------|----------|
-| 1 | SENSITIVITY | Compressor Input Gain — drives compression harder |
+| 1 | DRIVE | Compressor Input Gain — drives compression harder |
 | 2 | BASS | Channel EQ Low Shelf Gain |
 | 3 | TREBLE | Channel EQ High Shelf Gain |
 | 4 | COMPRESS | Compressor Mix (parallel blend 0–100%) |
-| 5 | REVERB | Reverb plugin Mix |
-| 6 | DELAY | Delay plugin Mix |
-| 7 | PITCH | Pitch/Chorus/Ensemble plugin Mix |
+| 5 | DYNAMICS | Compressor Attack + Release morph (Punch ↔ Sustain) |
+| 6 | WIDTH | Direction Mixer Spread (Narrow ↔ Wide, mono-safe) |
+| 7 | SPACE | Reverb plugin Mix |
 | 8 | OUTPUT | Gain plugin Output (final trim) |
+
+### Dynamics & Width
+
+- **DYNAMICS** maps to two compressor parameters simultaneously (Attack + Release). Full left = Punch (fast attack/release, transient snap). Full right = Sustain (slow attack/release, smooth leveling).
+- **WIDTH** uses Logic's Direction Mixer with mid-side processing. Guarantees clean mono fold-down with no phase cancellation. Full left = narrow/mono. Full right = wide stereo.
 
 ## File Structure
 
@@ -56,13 +59,13 @@ Presets install to Logic's standard locations:
 
 ## Build Order
 
-1. **MPD-CLA-VOX** — Most complex chain, sets template for all others
-2. **MPD-CLA-DRUM** — Validates FET smash + transient recovery approach
-3. **MPD-CLA-BASS** — Tests Opto + saturation strategy
-4. **MPD-CLA-GTR** — Tests VCA + delay/verb balance
-5. **MPD-CLA-UNPLG** — Lightest touch, validates gentle Opto approach
+1. **MPD-CLA-HI-MID** — Most complex chain, mid is most critical to get right
+2. **MPD-CLA-HIGH** — Validates VCA + DeEsser approach
+3. **MPD-CLA-AIR** — Tests shimmer/Exciter-heavy approach
+4. **MPD-CLA-LO-MID** — Tests Opto + warmth in low range
+5. **MPD-CLA-SUB** — Simplest chain, validates sub-only processing
 
 ## Requirements
 
-- Logic Pro 10.7+ (for ChromaVerb, DeEsser 2, Ensemble)
+- Logic Pro 10.7+ (for ChromaVerb, DeEsser 2, Direction Mixer)
 - All stock Logic plugins — no third-party dependencies
