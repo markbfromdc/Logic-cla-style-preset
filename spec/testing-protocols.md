@@ -225,6 +225,20 @@ Test each preset with at least 3 different real-world recordings:
 | HIGH | Vocal with sibilance | Acoustic guitar pick | Cymbal close-mic |
 | AIR | Female vocal (breathy) | Orchestral strings (bow noise) | Drum overhead pair |
 
+### MUSDB Stems Dataset
+
+The primary test dataset is [`danjacobellis/MUSDB_stems_stable_audio_fp16`](https://huggingface.co/datasets/danjacobellis/MUSDB_stems_stable_audio_fp16) — 150 full-length music tracks with isolated stems (drums, bass, vocals, other). Each stem maps to specific presets:
+
+| Stem | Primary Preset | Secondary Preset |
+|------|---------------|-----------------|
+| Drums | MPD-CLA-SUB | MPD-CLA-HI-MID |
+| Bass | MPD-CLA-SUB | MPD-CLA-LO-MID |
+| Vocals | MPD-CLA-HI-MID | MPD-CLA-AIR |
+| Other | MPD-CLA-LO-MID | MPD-CLA-HIGH |
+| Mixture | All 5 | — |
+
+See [spec/test-data.md](test-data.md) for full dataset documentation, loading instructions, and recommended test workflow.
+
 ---
 
 ## Regression Testing

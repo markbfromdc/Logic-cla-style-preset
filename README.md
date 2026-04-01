@@ -69,6 +69,11 @@ Presets install to Logic's standard locations:
 | [spec/testing-protocols.md](spec/testing-protocols.md) | Unit tests, integration tests, mono compatibility, performance benchmarks |
 | [spec/compatibility.md](spec/compatibility.md) | Logic Pro version requirements, installation, troubleshooting |
 | [spec/version-history.md](spec/version-history.md) | Change log and version traceability |
+| [spec/test-data.md](spec/test-data.md) | MUSDB stems dataset reference, stem-to-preset mapping |
+
+## Test Data
+
+Primary test material: [`danjacobellis/MUSDB_stems_stable_audio_fp16`](https://huggingface.co/datasets/danjacobellis/MUSDB_stems_stable_audio_fp16) — 150 full-length tracks with isolated stems (drums, bass, vocals, other) from the MUSDB18 music source separation corpus. Each stem maps directly to frequency-domain presets for systematic testing. See [spec/test-data.md](spec/test-data.md) for details.
 
 ## Build Order
 
