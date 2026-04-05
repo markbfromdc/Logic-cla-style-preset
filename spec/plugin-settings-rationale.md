@@ -1,8 +1,8 @@
 # Plugin Settings Rationale — Audio Engineering Design Decisions
 
-**Version:** 2.0
-**Last Updated:** 2026-03-31
-**Applies to:** All MPD-CLA presets
+**Version:** 3.0
+**Last Updated:** 2026-04-05
+**Applies to:** All MPD-CLA presets (mixing, bus, FX send, mastering)
 
 ---
 
@@ -109,6 +109,35 @@ Relative mode is chosen because these presets must work on any source at any lev
 
 ---
 
+## Enveloper Decisions
+
+### Why Enveloper Before Compressor
+
+The Enveloper plugin is placed immediately before the Compressor in all mixing presets, most bus presets, and per-band mastering presets. Its purpose is to provide an "expansion-like" character when the DYNAMICS knob (Compressor Mix) is at low values.
+
+### How It Works
+
+At DYNAMICS = 0%, the compressed signal is not mixed in — only the dry path passes through. Since the Enveloper sits before the Compressor, its transient boost is always present in the dry signal. This creates a punchy, transient-enhanced signal that feels "expanded" compared to the source.
+
+At DYNAMICS = 100%, the Compressor fully processes the signal, including the Enveloper-boosted transients. The compression then smooths out the transients, creating the compressed character.
+
+The spectrum from 0% to 100% therefore moves from expanded/transient-enhanced to compressed/smooth — all from a single parameter (Compressor Mix).
+
+### Fixed Settings
+
+| Parameter | Value | Rationale |
+|-----------|-------|-----------|
+| Attack Gain | +6 dB | Moderate boost — enough to create audible transient emphasis without clipping on loud sources. Higher values (+8 to +10 dB) are used on the drum bus where transient impact is critical. |
+| Attack Time | 20 ms | Catches the initial transient of most sources — drums, plucks, consonants. Fast enough for percussive material, slow enough to avoid artifacts on sustained sounds. |
+| Release Gain | 0 dB | No sustain manipulation — the Enveloper only shapes transients, not tails. Sustain shaping would interfere with the Compressor's job. |
+| Output Level | -3 dB | Compensates for the +6 dB transient peak. Since transients are brief (Attack Time = 20 ms), the average level increase is much less than +6 dB, so -3 dB (not -6 dB) provides appropriate compensation. |
+
+### Net Level Impact
+
+The Enveloper adds +6 dB to transient peaks but -3 dB to the overall output. Since transients are brief, the RMS level change is approximately 0 dB (within ±0.5 dB). This is confirmed in the per-preset level budgets in [signal-flow.md](signal-flow.md).
+
+---
+
 ## Exciter / Harmonic Enhancement Decisions
 
 ### Why Exciter (not Pedalboard) on Most Presets
@@ -116,6 +145,10 @@ Relative mode is chosen because these presets must work on any source at any lev
 **Exciter** generates upper harmonics at specified frequencies with precise control. It's designed for adding "presence" and "air" without altering the fundamental tone.
 
 **Pedalboard** uses distortion/overdrive circuits that generate harmonics across the entire spectrum. This is useful for SUB (where you want to create mid-frequency harmonics so subs translate on small speakers) but too uncontrolled for mid/high-frequency presets.
+
+### COLOR Knob (v3.0)
+
+In v2.0, the Exciter/Pedalboard Mix was fixed. In v3.0, the Mix is user-controllable via the **COLOR** knob (knob 5). The harmonic frequencies and amounts remain fixed — only the wet/dry blend is adjustable. This gives users control over how much harmonic character is added without changing the tonal targeting.
 
 ### Frequency Targeting Per Preset
 
@@ -207,6 +240,32 @@ Every reverb instance has High Cut and Low Cut to keep reverb energy within the 
 | SUB | 0.0 (mono) | 1.5 | Sub content is often summed to mono for club/PA systems. Starting from true mono (0.0) is essential. Max limited to 1.5 because excessive stereo widening on sub frequencies is never desirable. |
 | LO-MID | 0.5 | 1.5 | Moderate range — body content benefits from some narrowing but rarely needs true mono. Widening limited to 1.5 to prevent "phasey" low-mid stereo. |
 | HI-MID, HIGH, AIR | 0.5 | 2.0 | Full widening range. Mid and high frequencies tolerate and benefit from maximum stereo expansion. 2.0 gives dramatic width when needed. |
+
+---
+
+## Mastering Plugin Decisions (v3.0)
+
+### Linear Phase EQ (MIX Bus, All Mastering Presets)
+
+**Why Linear Phase instead of Channel EQ at mastering stage:**
+
+Channel EQ introduces phase shifts at its filter frequencies — this is normal and inaudible on individual tracks. But on the mix bus and mastering chain, where all sources are summed, these phase shifts can cause subtle smearing of transients and stereo image degradation. Linear Phase EQ applies the same frequency response with zero phase shift, preserving transient integrity and stereo coherence.
+
+**Trade-off:** Linear Phase EQ has higher latency (~20 ms) and CPU usage. This is acceptable on bus/mastering chains where latency is compensated by Logic's PDC and there are only 1–2 instances.
+
+### Adaptive Limiter (MASTER-BUS, MASTER-STREAM)
+
+The Adaptive Limiter rounds peaks like an analog amplifier rather than hard-clipping them. **OptimFull** mode provides maximum transparency. **Lookahead** is enabled to anticipate peaks before they arrive, allowing smoother gain reduction.
+
+The LOUD knob controls Gain (0 to +10/+12 dB), which pushes signal into the limiter. The Output Ceiling is fixed at -1 dBTP to prevent inter-sample peaks from clipping on D/A conversion.
+
+### Multipressor (MASTER-MULTI)
+
+Logic's Multipressor provides 4-band dynamics processing. Each band's threshold is independently controllable via knobs 1–4, giving per-band dynamics control from the BCF2000. Band crossover frequencies are fixed at 80 Hz, 500 Hz, and 4 kHz to align with the mixing preset frequency bands.
+
+### Loudness Meter (MASTER-STREAM)
+
+Used for LUFS monitoring only — no parameters are macro'd. The meter provides real-time integrated loudness measurement. Target: -14 LUFS for Spotify/YouTube, -16 LUFS for Apple Music. The user adjusts the LOUD knob (Adaptive Limiter Gain) while watching the meter.
 
 ---
 

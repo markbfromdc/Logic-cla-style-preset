@@ -10,12 +10,13 @@
 |------|--------|---------|
 | 1 | Channel EQ | Hi-mid focus + cleanup |
 | 2 | DeEsser 2 | Harshness control at 1–2 kHz |
-| 3 | Compressor (FET) | Aggressive mid dynamics |
-| 4 | Exciter | Midrange presence |
-| 5 | Tape Delay | Slap thickening |
-| 6 | ChromaVerb (Plate) | Mid-focused plate |
-| 7 | Direction Mixer | Mono-safe stereo width |
-| 8 | Gain | Output trim |
+| 3 | Enveloper | Fixed transient shaping (expansion feel at low DYNAMICS) |
+| 4 | Compressor (FET) | Aggressive mid dynamics |
+| 5 | Exciter | Midrange presence |
+| 6 | Tape Delay | Slap thickening |
+| 7 | ChromaVerb (Plate) | Mid-focused plate |
+| 8 | Direction Mixer | Mono-safe stereo width |
+| 9 | Gain | Output trim |
 
 ---
 
@@ -49,16 +50,25 @@
 | Mode | Relative | |
 | | | Always on, not macro'd |
 
+### Enveloper
+
+| Parameter | Value | Notes |
+|-----------|-------|-------|
+| Attack Gain | +6 dB | Fixed — transient emphasis for expansion feel |
+| Attack Time | 20 ms | |
+| Release Gain | 0 dB | No sustain manipulation |
+| Output Level | -3 dB | Compensate for transient peak gain |
+
 ### Compressor
 
 | Parameter | Value | Notes |
 |-----------|-------|-------|
 | Circuit | FET | Aggressive character suits midrange |
 | Ratio | 4:1 | |
-| Attack | 5 ms | DYNAMICS range: 0.2 ms (punch) → 40 ms (sustain) |
-| Release | 80 ms | DYNAMICS range: 20 ms (punch) → 300 ms (sustain) |
+| Attack | 5 ms | Fixed |
+| Release | 80 ms | Fixed |
 | Knee | 0.5 | |
-| Mix | 0% | Macro: 0–100% |
+| Mix | 0% | Macro: 0–100% (DYNAMICS knob) |
 | Input Gain | 0 dB | Macro: 0 to +18 dB |
 
 ### Exciter
@@ -70,7 +80,7 @@
 | Frequency 2 | 1.5 kHz | |
 | Amount 2 | 7% | |
 | Harmonics | Odd + Even | |
-| Mix | 25% | Fixed |
+| Mix | 25% | Macro: 0–50% (COLOR knob) |
 
 ### Tape Delay
 
@@ -111,11 +121,10 @@
 | 1 | DRIVE | Compressor > Input Gain | 0 dB | +18 dB | 0 dB |
 | 2 | BASS | Channel EQ > Low Shelf Gain | -6 dB | +6 dB | 0 dB |
 | 3 | TREBLE | Channel EQ > High Shelf Gain | -6 dB | +6 dB | 0 dB |
-| 4 | COMPRESS | Compressor > Mix | 0% | 100% | 0% |
-| 5 | DYNAMICS | Compressor > Attack (0.2–40 ms) | Punch | Sustain | 5 ms |
-| 5 | DYNAMICS | Compressor > Release (20–300 ms) | Punch | Sustain | 80 ms |
+| 4 | DYNAMICS | Compressor > Mix | 0% | 100% | 0% |
+| 5 | COLOR | Exciter > Mix | 0% | 50% | 25% |
 | 6 | WIDTH | Direction Mixer > Spread | 0.5 (narrow) | 2.0 (wide) | 1.0 |
 | 7 | SPACE | ChromaVerb > Mix | 0% | 40% | 0% |
 | 8 | OUTPUT | Gain > Gain | -12 dB | +6 dB | 0 dB |
 
-**Note:** Knob 5 (DYNAMICS) has two mappings — both Attack and Release are controlled by the same knob.
+**DYNAMICS behavior:** At 0%, the dry signal passes through with Enveloper transient boost only (expansion-like feel). At 100%, the fully compressed signal dominates. DRIVE controls how hard the signal hits the compressor threshold.

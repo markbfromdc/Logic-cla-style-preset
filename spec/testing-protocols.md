@@ -1,8 +1,8 @@
 # Testing & Validation Specification
 
-**Version:** 2.0
-**Last Updated:** 2026-03-31
-**Applies to:** All MPD-CLA presets
+**Version:** 3.0
+**Last Updated:** 2026-04-05
+**Applies to:** All MPD-CLA presets (mixing, bus, FX send, mastering — 25 total)
 
 ---
 
@@ -47,11 +47,11 @@ For each of the 8 Smart Control knobs:
 
 | Knob | Specific Verification |
 |------|----------------------|
-| DRIVE | At max, output meter stays below 0 dBFS with COMPRESS at 100% |
+| DRIVE | At max, output meter stays below 0 dBFS with DYNAMICS at 100% |
 | BASS | At ±6 dB extremes, no low-frequency resonance or rumble |
 | TREBLE | At ±6 dB extremes, no high-frequency harshness or ringing |
-| COMPRESS | At 0%, DRIVE and DYNAMICS have no audible effect |
-| DYNAMICS | At full left, attack is audibly fast; at full right, attack is audibly slow |
+| DYNAMICS | At 0%, DRIVE has no audible compression effect (dry signal with Enveloper transient boost only) |
+| COLOR | At min (0%), no harmonic enhancement; at max, audible saturation/exciter character |
 | WIDTH | At min, image collapses; at max, image expands; no phase artifacts |
 | SPACE | At max, reverb tail is audible but source remains identifiable |
 | OUTPUT | At -12 dB, signal is quiet but clean; at +6 dB, signal is louder but not clipping |
@@ -66,9 +66,9 @@ Verify each knob's mapped range matches the preset specification:
 | 2 | Set BASS to max | Check Channel EQ Low Shelf readout shows +6 dB |
 | 3 | Set BASS to min | Check Channel EQ Low Shelf readout shows -6 dB |
 | 4 | Set TREBLE to max/min | Same: ±6 dB |
-| 5 | Set DYNAMICS to full left | Check Compressor Attack shows fastest value for this preset |
-| 6 | Set DYNAMICS to full left | Check Compressor Release shows fastest value for this preset |
-| 7 | Set DYNAMICS to full right | Check Attack and Release show slowest values |
+| 5 | Set DYNAMICS to 0% | Check Compressor Mix shows 0% (dry signal, expansion feel via Enveloper) |
+| 6 | Set DYNAMICS to 100% | Check Compressor Mix shows 100% (full compression) |
+| 7 | Set COLOR to max | Check Exciter/Pedalboard Mix matches preset's max percentage |
 | 8 | Set WIDTH to max | Check Direction Mixer Spread matches preset's max (1.5 or 2.0) |
 | 9 | Set SPACE to max | Check Reverb Mix matches preset's max percentage |
 | 10 | Set OUTPUT to min/max | Check Gain readout shows -12 dB / +6 dB |
@@ -93,12 +93,13 @@ Test these specific knob combinations that produce compounding effects:
 
 | Test | Knobs | Expected Result |
 |------|-------|-----------------|
-| Heavy compression | DRIVE max + COMPRESS 100% + DYNAMICS left (Punch) | Aggressive, snappy compression — usable, not distorted |
-| Heavy sustain | DRIVE max + COMPRESS 100% + DYNAMICS right (Sustain) | Heavy, smooth leveling — usable, not pumping |
-| Compression bypass verify | COMPRESS 0% + DRIVE any + DYNAMICS any | Identical sound regardless of DRIVE/DYNAMICS positions |
+| Heavy compression | DRIVE max + DYNAMICS 100% | Aggressive compression — usable, not distorted |
+| Expansion feel | DRIVE max + DYNAMICS 0% | Dry signal with Enveloper transient boost — punchy, expanded feel |
+| Compression bypass verify | DYNAMICS 0% + DRIVE any | Identical sound regardless of DRIVE position (dry signal only) |
 | Maximum spatial | SPACE max + WIDTH max | Very wet, very wide — dramatic but not broken |
 | Tone extremes | BASS max + TREBLE max | Scooped mid with boosted extremes — unusual but not distorted |
-| Tone + compression | BASS max + DRIVE max + COMPRESS 100% | Low shelf boost feeding into compression — verify no pumping |
+| Tone + compression | BASS max + DRIVE max + DYNAMICS 100% | Low shelf boost feeding into compression — verify no pumping |
+| Max saturation | COLOR max + DYNAMICS 100% + DRIVE max | Full compression + full harmonic enhancement — usable, not distorted |
 | Full everything | All knobs at max | Very heavily processed — verify no digital clipping |
 
 ### 2.3 Preset Switching Test
@@ -185,11 +186,11 @@ This is the most critical test for production use. Many playback systems sum ste
 
 | Preset | Plugin Count | Notes |
 |--------|-------------|-------|
-| SUB | 6 | Lightest chain |
-| LO-MID | 7 | Standard chain |
-| HI-MID | 8 | Heaviest — includes DeEsser + Tape Delay + Exciter |
-| HIGH | 8 | Same as HI-MID |
-| AIR | 7 | No Tape Delay |
+| SUB | 7 | Includes Enveloper |
+| LO-MID | 8 | Standard chain with Enveloper |
+| HI-MID | 9 | Heaviest — DeEsser + Enveloper + Tape Delay + Exciter |
+| HIGH | 9 | Same as HI-MID |
+| AIR | 8 | No Tape Delay |
 
 ### 4.3 Latency Check
 
@@ -249,6 +250,8 @@ After modifying any plugin setting, re-run:
 |-------------|----------------|
 | Changed EQ frequency or gain | Phase 1.2 (BASS/TREBLE sweep), Phase 2.1 (A/B) |
 | Changed compressor ratio/attack/release | Phase 1.2 (DYNAMICS sweep), Phase 2.2 (multi-knob interaction) |
+| Changed Enveloper settings | Phase 1.2 (DYNAMICS sweep at 0%), Phase 2.2 (expansion feel test) |
+| Changed Exciter/Pedalboard mix range | Phase 1.2 (COLOR sweep), Phase 1.3 (range boundary) |
 | Changed reverb algorithm or decay | Phase 1.2 (SPACE sweep), Phase 3.3 (reverb + width) |
 | Changed Direction Mixer range | Phase 3 (all mono compatibility tests) |
 | Changed any Smart Control mapping | Phase 1.3 (range boundary), Phase 2.3 (preset switching) |

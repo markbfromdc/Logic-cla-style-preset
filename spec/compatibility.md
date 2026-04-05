@@ -1,8 +1,8 @@
 # Compatibility & Deployment Specification
 
-**Version:** 2.0
-**Last Updated:** 2026-03-31
-**Applies to:** All MPD-CLA presets
+**Version:** 3.0
+**Last Updated:** 2026-04-05
+**Applies to:** All MPD-CLA presets (mixing, bus, FX send, mastering)
 
 ---
 
@@ -23,15 +23,21 @@ All plugins used are stock Logic Pro plugins. This table documents when each plu
 
 | Plugin | First Available | Used In Presets | Critical? |
 |--------|----------------|-----------------|-----------|
-| Channel EQ | Logic Pro 8+ | All 5 | Yes — core EQ |
-| Compressor | Logic Pro 8+ | All 5 | Yes — core dynamics |
-| Gain | Logic Pro 8+ | All 5 | Yes — output trim |
-| Tape Delay | Logic Pro 9+ | LO-MID, HI-MID, HIGH | Yes — fixed thickening |
-| Exciter | Logic Pro 9+ | LO-MID, HI-MID, HIGH, AIR | Yes — harmonic enhancement |
-| Pedalboard | Logic Pro 9+ | SUB | Yes — sub harmonic saturation |
-| ChromaVerb | Logic Pro 10.4 | All 5 | Yes — primary reverb |
-| DeEsser 2 | Logic Pro 10.4 | HI-MID, HIGH, AIR | Yes — harshness control |
-| Direction Mixer | Logic Pro 9+ | All 5 | Yes — stereo width |
+| Channel EQ | Logic Pro 8+ | All mixing, bus, FX send | Yes — core EQ |
+| Compressor | Logic Pro 8+ | All mixing, bus, mastering | Yes — core dynamics |
+| Gain | Logic Pro 8+ | All 25 presets | Yes — output trim |
+| Enveloper | Logic Pro 10.4 | All mixing, most bus, per-band mastering | Yes — transient shaping for DYNAMICS |
+| Tape Delay | Logic Pro 9+ | LO-MID, HI-MID, HIGH, FX sends | Yes — thickening + FX sends |
+| Exciter | Logic Pro 9+ | Most mixing, bus, per-band mastering | Yes — harmonic enhancement (COLOR) |
+| Pedalboard | Logic Pro 9+ | SUB, BASS bus, per-band mastering SUB | Yes — sub harmonic saturation |
+| ChromaVerb | Logic Pro 10.4 | All mixing, most bus, FX sends | Yes — primary reverb |
+| DeEsser 2 | Logic Pro 10.4 | HI-MID, HIGH, AIR, VOCALS bus | Yes — harshness control |
+| Direction Mixer | Logic Pro 9+ | All 25 presets | Yes — stereo width |
+| Linear Phase EQ | Logic Pro 9+ | MIX bus, all mastering | Yes — phase-coherent mastering EQ |
+| Adaptive Limiter | Logic Pro 9+ | MASTER-BUS, MASTER-STREAM | Yes — mastering loudness |
+| Limiter | Logic Pro 8+ | MASTER-BUS, MASTER-STREAM | Yes — safety ceiling |
+| Multipressor | Logic Pro 9+ | MASTER-MULTI | Yes — multiband dynamics |
+| Loudness Meter | Logic Pro 10.4 | MASTER-STREAM | Yes — LUFS monitoring |
 
 **Minimum Logic version:** 10.7 (for the latest ChromaVerb and DeEsser 2 algorithm updates).
 
@@ -49,20 +55,33 @@ Logic Pro uses standard macOS directories for presets:
 
 ```
 ~/Music/Audio Music Apps/
-├── Channel Strip Settings/
-│   └── MPD-CLA/
-│       ├── MPD-CLA-SUB.cst
-│       ├── MPD-CLA-LO-MID.cst
-│       ├── MPD-CLA-HI-MID.cst
-│       ├── MPD-CLA-HIGH.cst
-│       └── MPD-CLA-AIR.cst
-└── Patches/
-    └── MPD-CLA/
-        ├── MPD-CLA-SUB.patch
-        ├── MPD-CLA-LO-MID.patch
-        ├── MPD-CLA-HI-MID.patch
-        ├── MPD-CLA-HIGH.patch
-        └── MPD-CLA-AIR.patch
+├── Channel Strip Settings/MPD-CLA/
+│   ├── MPD-CLA-SUB.cst              ← 5 mixing presets
+│   ├── MPD-CLA-LO-MID.cst
+│   ├── MPD-CLA-HI-MID.cst
+│   ├── MPD-CLA-HIGH.cst
+│   ├── MPD-CLA-AIR.cst
+│   ├── MPD-BUS-DRUMS.cst            ← 7 bus presets
+│   ├── MPD-BUS-BASS.cst
+│   ├── MPD-BUS-GUITARS.cst
+│   ├── MPD-BUS-KEYS.cst
+│   ├── MPD-BUS-VOCALS.cst
+│   ├── MPD-BUS-FX.cst
+│   ├── MPD-BUS-MIX.cst
+│   ├── MPD-FX-SHORT-VERB.cst        ← 4 FX send presets
+│   ├── MPD-FX-LONG-VERB.cst
+│   ├── MPD-FX-SLAP-DLY.cst
+│   ├── MPD-FX-LONG-DLY.cst
+│   ├── MPD-MASTER-BUS.cst           ← 8 mastering presets
+│   ├── MPD-MASTER-SUB.cst
+│   ├── MPD-MASTER-LO-MID.cst
+│   ├── MPD-MASTER-HI-MID.cst
+│   ├── MPD-MASTER-HIGH.cst
+│   ├── MPD-MASTER-AIR.cst
+│   ├── MPD-MASTER-STREAM.cst
+│   └── MPD-MASTER-MULTI.cst
+└── Patches/MPD-CLA/
+    └── (same 25 filenames with .patch extension)
 ```
 
 **Note:** `~` refers to the current user's home directory (e.g., `/Users/username/`).
@@ -85,7 +104,7 @@ Logic Pro creates the parent directories (`Channel Strip Settings/`, `Patches/`)
 | Channel Strip Setting | `.cst` | Plugin chain + all plugin parameter values | Loading just the plugin chain without Smart Controls |
 | Patch | `.patch` | Everything in .cst + Smart Control layout, mappings, labels, min/max ranges, send routing, output routing | Loading the full preset with Smart Controls (primary use) |
 
-**Critical distinction:** Smart Control mappings (including the DYNAMICS dual-parameter mapping and WIDTH control) are ONLY preserved in .patch files. If you load a .cst file, the plugins will be correct but the Smart Control knobs will not be mapped.
+**Critical distinction:** Smart Control mappings (including all knob-to-parameter assignments and WIDTH control) are ONLY preserved in .patch files. If you load a .cst file, the plugins will be correct but the Smart Control knobs will not be mapped.
 
 ---
 
